@@ -1,6 +1,6 @@
 <?php
 /*
-dbxBackup_php v1.0.0
+dbxBackup_php v1.0.1
 Copyright (C) 2013  Oscar de Souza Dias
 
 This program is free software; you can redistribute it and/or modify
