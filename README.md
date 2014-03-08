@@ -9,8 +9,7 @@ How to
 The class code is defined in dbxbachup.php and a simple usage example is at backup.php.
 You can (should) create a cron job to execute your version of backup.php in a regular basis.
 
-There is a file caled app_info.json that contains the details from dbxbackup_php app in Dropbox.
-You can register your own app and replace this info.
+There is a file caled app_info.json where you need to input the details of your app in Dropbox.
 
 What it does
 ------------
