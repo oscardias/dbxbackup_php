@@ -221,10 +221,13 @@ class dbxBackup{
 
         // Initialize an iterator with the folder
         $iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($folder));
+        
+        // Set basepath for zip file
+        $basepath = basename($folder);
 
         // Iterate over the directory and add each file found to the archive
         foreach ($iterator as $key => $value) {
-                $zip->addFile(realpath($key), $key) or die ("Could not add file: $key");
+                $zip->addFile(realpath($key), str_replace($folder, $basepath, $key)) or die ("Could not add file: $key");
         }
 
         // Close and save archive
