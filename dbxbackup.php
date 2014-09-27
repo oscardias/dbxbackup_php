@@ -26,20 +26,20 @@ class dbxBackup{
     var $dbuser;
     var $dbpass;
     var $dbname;
-    
+
     // Folders
     var $folder;
 
     // Mode
     var $mode;
-    
+
     // Paths
     var $local;
     var $remote;
-    
+
     // Compressed files
     var $zip_files;
-    
+
     /*
      * Set database details
      */
@@ -50,7 +50,7 @@ class dbxBackup{
         $this->dbpass = $pass;
         $this->dbname = $name;
     }
-    
+
     /*
      * Set folder to backup
      */
@@ -74,7 +74,7 @@ class dbxBackup{
                 break;
         }
     }
-    
+
     /*
      * Set local and Dropbox path
      */
@@ -83,7 +83,7 @@ class dbxBackup{
         $this->local = $local;
         $this->remote = $remote;
     }
-    
+
     /*
      * Execution
      */
@@ -91,17 +91,17 @@ class dbxBackup{
     {
         // Prepare array for zip files
         $this->zip_files = array();
-        
+
         // Dump databases
         $this->dumpDatabase();
-        
+
         // Compress folder
         $this->compressFolder();
-        
+
         // Sync to Ubuntu One
         $this->syncFiles();
     }
-    
+
     /*
      * MySQL Database dump
      */
@@ -111,7 +111,7 @@ class dbxBackup{
             $this->_dumpSingle($value);
         }
     }
-    
+
     /*
      * Compress directories
      */
@@ -132,9 +132,9 @@ class dbxBackup{
         } else {
             $data = file_get_contents($this->local . 'dbxbackup');
         }
-        
+
         $tokenA = json_decode($data, TRUE);
-        
+
         // Set up the token for use in OAuth requests
         $accessToken = $tokenA['token'];
 
@@ -145,7 +145,7 @@ class dbxBackup{
             $this->_sendFile($dbxClient, $file, $this->remote);
         }
     }
-    
+
     /*
      * Athorize app with Ubuntu One
      */
@@ -153,26 +153,26 @@ class dbxBackup{
     {
         $appInfo = Dropbox\AppInfo::loadFromJsonFile("app_info.json");
         $webAuth = new Dropbox\WebAuthNoRedirect($appInfo, "dbxbackup/1.0");
-        
+
         $authorizeUrl = $webAuth->start();
-        
+
         echo "1. Go to: " . $authorizeUrl . "\n";
         echo "2. Click \"Allow\" (you might have to log in first).\n";
         echo "3. Copy the authorization code.\n";
         $authCode = trim(readline("Enter the authorization code here: "));
-        
+
         list($accessToken, $dropboxUserId) = $webAuth->finish($authCode);
 
         $data = array(
             'token' => $accessToken,
             'userid' => $dropboxUserId
         );
-        
+
         file_put_contents($this->local . 'dbxbackup', json_encode($data));
-        
+
         return json_encode($data);
     }
-    
+
     /*
      * Dump specific database
      */
@@ -180,29 +180,29 @@ class dbxBackup{
     {
         $filename = $dbname . $this->mode . '.sql';
         $backupfile = $this->local . $filename;
-        
+
         if($this->dbpass)
             system("mysqldump -h $this->dbhost -u $this->dbuser -p$this->dbpass $dbname > $backupfile");
         else
             system("mysqldump -h $this->dbhost -u $this->dbuser $dbname > $backupfile");
-        
+
         // Compress
         $zip = new ZipArchive();
-        
+
         $zipFilename = $this->local . $dbname . $this->mode . '.zip';
-        
+
         if ($zip->open($zipFilename, ZIPARCHIVE::CREATE) !== TRUE) {
             die ("Could not open target file!");
         }
-        
+
         $zip->addFile($backupfile, $filename) or die ("Could not add file: $filename");
-        
+
         $zip->close();
-        
+
         // Add to zip files array
         $this->zip_files[] = $zipFilename;
     }
-    
+
     /*
      * Compress single folder
      */
@@ -210,7 +210,7 @@ class dbxBackup{
     {
         // Zip object
         $zip = new ZipArchive();
-        
+
         // Use folder path for file name
         $filename = $this->local . str_replace('\\', '_', str_replace('/', '_', $folder)) . $this->mode . '.zip';
 
@@ -221,22 +221,28 @@ class dbxBackup{
 
         // Initialize an iterator with the folder
         $iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($folder));
-        
+
         // Set basepath for zip file
         $basepath = basename($folder);
 
         // Iterate over the directory and add each file found to the archive
         foreach ($iterator as $key => $value) {
+                $file = basename($key);
+                // Ignore . and ..
+                if($file === '.' || $file === '..') {
+                    continue;
+                }
+
                 $zip->addFile(realpath($key), str_replace($folder, $basepath, $key)) or die ("Could not add file: $key");
         }
 
         // Close and save archive
         $zip->close();
-            
+
         // Add to zip files array
         $this->zip_files[] = $filename;
     }
-    
+
     /*
      * Send single file to Ubuntu One
      */
