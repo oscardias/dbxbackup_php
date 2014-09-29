@@ -31,7 +31,7 @@ $dbxobj->setDatabase('localhost', 'root', '', array('dbname')); //array('dbname1
 $dbxobj->setFolder(array('/var/www')); //array('/var/www/site1', '/var/www/site2')
 
 // Define files/folders that should be ignored
-$dbxobj->setIgnoreFolder(array('.git')); //array('.git', 'wp-admin', 'LICENSE')
+$dbxobj->setIgnore(array('.git')); //array('.git', 'wp-admin', 'LICENSE')
 
 // Backup mode - always overwrite same file or add week day
 $dbxobj->setBackupMode('single'); // or 'week'
