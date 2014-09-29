@@ -29,6 +29,7 @@ class dbxBackup{
 
     // Folders
     var $folder;
+    var $ignore;
 
     // Mode
     var $mode;
@@ -57,6 +58,14 @@ class dbxBackup{
     public function setFolder ($folder)
     {
         $this->folder = $folder;
+    }
+
+    /*
+     * Ignore files or folders
+     */
+    public function setIgnore ($items)
+    {
+        $this->ignore = $items;
     }
 
     /*
@@ -228,8 +237,14 @@ class dbxBackup{
         // Iterate over the directory and add each file found to the archive
         foreach ($iterator as $key => $value) {
                 $file = basename($key);
+
                 // Ignore . and ..
                 if($file === '.' || $file === '..') {
+                    continue;
+                }
+
+                // Ignore additional files or folders
+                if(in_array($file, $this->ignore)) {
                     continue;
                 }
 
