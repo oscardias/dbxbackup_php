@@ -1,6 +1,6 @@
 <?php
 /*
-dbxBackup_php v1.0.1
+dbxBackup_php v1.0.2
 Copyright (C) 2013  Oscar de Souza Dias
 
 This program is free software; you can redistribute it and/or modify
@@ -33,8 +33,8 @@ $dbxobj->setFolder(array('/var/www')); //array('/var/www/site1', '/var/www/site2
 // Define files/folders that should be ignored
 $dbxobj->setIgnore(array('.git')); //array('.git', 'wp-admin', 'LICENSE')
 
-// Backup mode - always overwrite same file or add week day
-$dbxobj->setBackupMode('single'); // or 'week'
+// Backup mode - always overwrite same file, or append hour, day, hour_day or week day
+$dbxobj->setBackupMode('single'); // or 'hour' / 'day' / 'hour_day' / 'week'
 
 // Local path for files (must have permission) and Dropbox path
 $dbxobj->setWorkFolders('/tmp/', '/backups/');

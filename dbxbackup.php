@@ -1,6 +1,6 @@
 <?php
 /*
-dbxBackup_php v1.0.1
+dbxBackup_php v1.0.2
 Copyright (C) 2013  Oscar de Souza Dias
 
 This program is free software; you can redistribute it and/or modify
@@ -74,6 +74,18 @@ class dbxBackup{
     public function setBackupMode ($mode)
     {
         switch ($mode) {
+            case 'hour':
+                $this->mode = date('H');
+                break;
+
+            case 'day':
+                $this->mode = date('d');
+                break;
+
+            case 'hour_day':
+                $this->mode = date('Hd');
+                break;
+
             case 'week':
                 $this->mode = date('N');
                 break;
