@@ -29,40 +29,49 @@ Options
 
 Define your database details in the following command:
 
-    $dbxobj->setDatabase('localhost', 'root', '', array('dbname'));
+```php
+$dbxobj->setDatabase('localhost', 'root', '', array('dbname'));
+```
 
-Add more databases in the array to banckup more than one using *array('dbname1', 'dbname2')*.
+Add more databases in the array to banckup more than one using `array('dbname1', 'dbname2')`.
 
 **Folders:**
 
 Define the folders that will to be compressed and backed up:
 
-    $dbxobj->setFolder(array('/var/www'));
+```php
+$dbxobj->setFolder(array('/var/www'));
+```
 
-Add more folders in the array to backup more than one using *array('/var/www/site1', '/var/www/site2')*.
+Add more folders in the array to backup more than one using `array('/var/www/site1', '/var/www/site2')`.
 
 Define files/folders that should be ignored when compressing the folder:
 
-    $dbxobj->setIgnore(array('.git'));
+```php
+$dbxobj->setIgnore(array('.git'));
+```
 
 **Backup mode:**
 
 Define how the file should be saved to DropBox:
 
-- *'single'*: if the routine should always overwrite the same file
-- *'hour'*: append the hour to the filename - one file for each hour that you execute it
-- *'day'*: append the day to the filename - one file for each day that you execute it
-- *'hour_day'*: append the hour and day to the filename - one file for each hour and day that you execute it
-- *'week'*: append the week day (1, 2, 3 ... 7) to the filename - one file for each day of the week that you execute it
+- `'single'`: if the routine should always overwrite the same file
+- `'hour'`: append the hour to the filename - one file for each hour that you execute it
+- `'day'`: append the day to the filename - one file for each day that you execute it
+- `'hour_day'`: append the hour and day to the filename - one file for each hour and day that you execute it
+- `'week'`: append the week day (1, 2, 3 ... 7) to the filename - one file for each day of the week that you execute it
 
-
-    $dbxobj->setBackupMode('single');
+```php
+$dbxobj->setBackupMode('single');
+```
 
 **Local and Dropbox Paths**
 
 Where the files will be saved locally and inside Dropbox. First the local folder (the routine must have permission for that) and the second parameter is for Dropbox:
 
-    $dbxobj->setWorkFolders('/tmp/', '/backups/');
+```php
+$dbxobj->setWorkFolders('/tmp/', '/backups/');
+```
 
 References
 ----------
